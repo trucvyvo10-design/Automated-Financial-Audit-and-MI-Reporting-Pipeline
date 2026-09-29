@@ -1,8 +1,42 @@
-## Interactive AML Risk Dashboard (Streamlit & Plotly)
+# Financial Crime Analytics & On-Chain AML Forensic Pipeline
 
-<img width="1396" height="900" alt="Screenshot 2026-09-29 at 9 14 46 PM" src="https://github.com/user-attachments/assets/d236b1a4-0857-4268-aa7a-759168cba081" />
+## Executive Overview
+This repository delivers an end-to-end Financial Crime, Anti-Money Laundering (AML), and Forensic Analytics infrastructure designed to detect, analyze, and visualize high-risk illicit activity within large-scale financial transaction networks. 
 
-### Key Features:
-- **Real-time Risk Analytics**: Dynamic filtering across 50,000 Core Banking transaction logs.
-- **AML Structuring Detection**: Automated flagging of high-risk transactions near regulatory threshold ($10,000 USD).
-- **Interactive Drilldown**: Cross-channel analysis across Mobile Banking, ATM, Branch Counter, and Internet Banking.
+Moving beyond synthetic general ledger simulations, this project integrates the **Elliptic Bitcoin Dataset**-a real-world cryptocurrency network dataset mapped by Elliptic and MIT researchers - to provide actionable forensic insights across 200,000+ transaction entities.
+
+---
+
+## Interactive Forensic AML Dashboard
+
+<img width="1398" height="900" alt="Screenshot 2026-09-29 at 10 03 40 PM" src="https://github.com/user-attachments/assets/c434a040-f954-4e41-80fd-bb06bbac7332" />
+
+### Key Capabilities:
+- **On-Chain Risk Quantification**: Real-time identification and aggregation of confirmed illicit entities (scams, ransomware, darknet markets) versus legitimate financial flow.
+- **Network Topology Analysis**: Deep-dive degree calculations measuring transaction connection density (inbound/outbound flows) across transaction edges.
+- **Time-Step Trend Mapping**: Dynamic temporal tracking of illicit transaction volumes across discrete network time steps to observe pattern shifts.
+- **Granular Forensic Drilldown**: Executive-ready drilldown tables isolating high-risk transaction IDs ranked by network connection complexity.
+
+---
+
+## Dataset Architecture & Pipeline Design
+
+The forensic engine processes three interconnected layers from the Elliptic Bitcoin Dataset:
+
+1. **Transaction Classes (`elliptic_txs_classes.csv`)**: Primary risk mapping categorizing transactions into *Illicit (High Risk)*, *Licit (Legitimate)*, and *Unlabeled*.
+2. **Network Edgelist (`elliptic_txs_edgelist.csv`)**: Directed graph flows mapping inputs and outputs to calculate total network connection degrees for each entity.
+3. **Aggregated Features (`elliptic_txs_features.csv`)**: 166 local and aggregated graph attributes representing transaction characteristics and temporal time steps.
+
+---
+
+## Repository Structure
+
+```text
+.
+├── 01_General_Ledger_Audit/        # Core Accounting & Schema Auditing Files
+├── 02_Forensic_Whitepapers/        # Benford's Law & Internal Control Frameworks
+├── 03_SQL_Engine/                  # Advanced Window Functions & Analytical Queries
+├── 04_Python_Automation/           # Interactive Streamlit App & Data Pipeline
+│   ├── elliptic_bitcoin_dataset/   # Real-World Elliptic CSV Files
+│   └── app_risk_dashboard.py       # Streamlit Executive Forensic Dashboard
+└── README.md                       # Project Documentation
