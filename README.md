@@ -10,6 +10,8 @@ Moving beyond synthetic general ledger simulations, this project integrates the 
 ## Interactive Forensic AML Dashboard
 
 <img width="1398" height="900" alt="Screenshot 2026-09-29 at 10 03 40 PM" src="https://github.com/user-attachments/assets/c434a040-f954-4e41-80fd-bb06bbac7332" />
+<img width="1400" height="900" alt="Screenshot 2026-09-29 at 11 53 29 PM" src="https://github.com/user-attachments/assets/99285db5-38d9-419e-9814-00fef94890f2" />
+
 
 ### Key Capabilities:
 - **On-Chain Risk Quantification**: Real-time identification and aggregation of confirmed illicit entities (scams, ransomware, darknet markets) versus legitimate financial flow.
