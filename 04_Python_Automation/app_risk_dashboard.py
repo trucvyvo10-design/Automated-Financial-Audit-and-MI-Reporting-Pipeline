@@ -132,3 +132,14 @@ if not df.empty:
     
     illicit_table = filtered_df[filtered_df["class"] == '1'][cols_present].sort_values(by="total_network_degree", ascending=False).head(100)
     st.dataframe(illicit_table, use_container_width=True)
+import networkx as nx
+
+@st.cache_data
+def calculate_graph_metrics(edges_df):
+    # Build Directed Graph from transaction flow
+    G = nx.from_pandas_edgelist(edges_df, source='txId1', target='txId2', create_using=nx.DiGraph())
+    
+    # Calculate PageRank (node importance in money flow)
+    pagerank = nx.pagerank(G, max_iter=50)
+    pr_df = pd.DataFrame(list(pagerank.items()), columns=['txId', 'pagerank_score'])
+    return pr_df
