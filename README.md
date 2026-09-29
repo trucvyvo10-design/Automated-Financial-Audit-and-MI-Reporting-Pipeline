@@ -42,19 +42,3 @@ The forensic engine processes three interconnected layers from the Elliptic Bitc
 │   ├── elliptic_bitcoin_dataset/   # Real-World Elliptic CSV Files
 │   └── app_risk_dashboard.py       # Streamlit Executive Forensic Dashboard
 └── README.md                       # Project Documentation
-
-## Advanced Senior Capabilities
-
-- **Machine Learning Fraud Scoring**: Trained Random Forest Classifier delivering 0–100% Risk Probability Scores across 150,000+ unlabeled Bitcoin entities.
-- **Graph Topology Mining**: Integrated network degree connections to identify high-velocity transaction nodes within directed graph flows.
-- **Enterprise Containerization**: Fully dockerized application environment for seamless deployment.
-
----
-
-## Docker Deployment
-
-To run the application inside a container:
-
-1. Build the Docker image:
-   ```bash
-   docker build -t aml-forensic-dashboard .
