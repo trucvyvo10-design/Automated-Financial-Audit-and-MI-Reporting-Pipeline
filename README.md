@@ -1,9 +1,10 @@
+
 # Financial Crime Analytics & On-Chain AML Forensic Pipeline
 
 ## Executive Overview
 This repository delivers an end-to-end Financial Crime, Anti-Money Laundering (AML), and Forensic Analytics infrastructure designed to detect, analyze, and visualize high-risk illicit activity within large-scale financial transaction networks. 
 
-Moving beyond synthetic general ledger simulations, this project integrates the **Elliptic Bitcoin Dataset**-a real-world cryptocurrency network dataset mapped by Elliptic and MIT researchers - to provide actionable forensic insights across 200,000+ transaction entities.
+Moving beyond synthetic general ledger simulations, this project integrates the **Elliptic Bitcoin Dataset**—a real-world cryptocurrency network dataset mapped by Elliptic and MIT researchers—to provide actionable forensic insights across 200,000+ transaction entities.
 
 ---
 
@@ -14,10 +15,10 @@ Moving beyond synthetic general ledger simulations, this project integrates the 
 
 
 ### Key Capabilities:
-- **On-Chain Risk Quantification**: Real-time identification and aggregation of confirmed illicit entities (scams, ransomware, darknet markets) versus legitimate financial flow.
-- **Network Topology Analysis**: Deep-dive degree calculations measuring transaction connection density (inbound/outbound flows) across transaction edges.
-- **Time-Step Trend Mapping**: Dynamic temporal tracking of illicit transaction volumes across discrete network time steps to observe pattern shifts.
-- **Granular Forensic Drilldown**: Executive-ready drilldown tables isolating high-risk transaction IDs ranked by network connection complexity.
+- **AI/ML Fraud Risk Scoring**: Integrated Random Forest classifier calculating 0–100% predictive risk probabilities across 150,000+ unlabeled entities.
+- **On-Chain Risk Quantification**: Real-time identification and aggregation of confirmed illicit entities versus legitimate financial flow.
+- **Network Topology Analysis**: Deep-dive degree calculations measuring transaction connection density (inbound/outbound flows).
+- **Time-Step Trend Mapping**: Dynamic temporal tracking of illicit transaction volumes across discrete network time steps.
 
 ---
 
