@@ -1,45 +1,56 @@
+# Bitcoin On-Chain AML Forensics & Compliance Analytics Engine
 
-# Financial Crime Analytics & On-Chain AML Forensic Pipeline
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Executive Overview
-This repository delivers an end-to-end Financial Crime, Anti-Money Laundering (AML), and Forensic Analytics infrastructure designed to detect, analyze, and visualize high-risk illicit activity within large-scale financial transaction networks. 
 
-Moving beyond synthetic general ledger simulations, this project integrates the **Elliptic Bitcoin Dataset**—a real-world cryptocurrency network dataset mapped by Elliptic and MIT researchers—to provide actionable forensic insights across 200,000+ transaction entities.
+This repository implements an end-to-end **Batch On-Chain Anti-Money Laundering (AML) Transaction Monitoring Engine** using the public Elliptic Bitcoin Dataset (203,769 transactions). 
 
----
-
-## Interactive Forensic AML Dashboard
-
-<img width="1398" height="900" alt="Screenshot 2026-09-29 at 10 03 40 PM" src="https://github.com/user-attachments/assets/c434a040-f954-4e41-80fd-bb06bbac7332" />
-<img width="1400" height="900" alt="Screenshot 2026-09-29 at 11 53 29 PM" src="https://github.com/user-attachments/assets/99285db5-38d9-419e-9814-00fef94890f2" />
-
-
-### Key Capabilities:
-- **AI/ML Fraud Risk Scoring**: Integrated Random Forest classifier calculating 0–100% predictive risk probabilities across 150,000+ unlabeled entities.
-- **On-Chain Risk Quantification**: Real-time identification and aggregation of confirmed illicit entities versus legitimate financial flow.
-- **Network Topology Analysis**: Deep-dive degree calculations measuring transaction connection density (inbound/outbound flows).
-- **Time-Step Trend Mapping**: Dynamic temporal tracking of illicit transaction volumes across discrete network time steps.
+Designed for Financial Crime Investigation (FCC) teams, the engine extracts degree features, evaluates transaction risk via Machine Learning, and provides compliance officers with operational threshold tuning metrics to optimize daily alert triage.
 
 ---
 
-## Dataset Architecture & Pipeline Design
+## Key Corrective Methodologies & Data Integrity
 
-The forensic engine processes three interconnected layers from the Elliptic Bitcoin Dataset:
+1. **Transaction Nodes vs. Entities:** The Elliptic dataset consists of **203,769 transaction nodes** connected by Directed Acyclic Graph (DAG) edges. Features represent transaction properties, not individual wallet addresses or entities.
+2. **Data Imbalance & Labeled Sample Space:**
+   * **Total Transactions:** 203,769
+   * **Labeled Transactions:** 46,564 (22.8% of dataset)
+     * **Illicit (Class 1):** 4,545 (~9.8% of labeled subset)
+     * **Licit (Class 2):** 42,019 (~90.2% of labeled subset)
+   * **Unlabeled (Class 0):** 157,205 (77.2% of dataset)
+3. **Temporal Data Split (Preventing Data Leakage):**
+   * Transactions are split chronologically across 49 time steps to prevent forward-looking data leakage.
+   * **Train Set:** Time Steps 1 to 34 (30,523 labeled transactions).
+   * **Test Set:** Time Steps 35 to 49 (16,041 labeled transactions).
 
-1. **Transaction Classes (`elliptic_txs_classes.csv`)**: Primary risk mapping categorizing transactions into *Illicit (High Risk)*, *Licit (Legitimate)*, and *Unlabeled*.
-2. **Network Edgelist (`elliptic_txs_edgelist.csv`)**: Directed graph flows mapping inputs and outputs to calculate total network connection degrees for each entity.
-3. **Aggregated Features (`elliptic_txs_features.csv`)**: 166 local and aggregated graph attributes representing transaction characteristics and temporal time steps.
+---
+
+## Model Evaluation & Results
+
+Evaluated strictly on unseen ground-truth test data (**Time Steps 35–49**):
+
+| Metric | Licit Class (0) | Illicit Class (1) | Macro Average |
+| :--- | :--- | :--- | :--- |
+| **Precision** | 0.98 | **0.84** | 0.91 |
+| **Recall** | 0.98 | **0.78** | 0.88 |
+| **F1-Score** | 0.98 | **0.81** | 0.90 |
+
+> **Note on Unlabeled Transactions:** Model predictions on unlabeled nodes represent probabilistic **Risk Scores (0.00 – 1.00)** used to prioritize human investigation queues. They are not treated as confirmed ground-truth illicit transactions.
+
+---
+
+## Compliance Operations: Alert Capacity Tuning
+
+To balance compliance workload constraints against AML risk exposure, the engine provides dynamic threshold tuning:
+
+![Alert Volume vs Precision Curve](docs/alert_precision_threshold_curve.png)
+
+### Key Takeaways for Compliance Management:
+* **High-Precision Mode (Threshold = 0.80):** Generates ~350 alerts/period with an estimated **88% Precision**, reducing false positive noise for limited compliance teams.
+* **High-Recall Mode (Threshold = 0.35):** Captures >92% of illicit transactions while generating ~1,100 alerts, suited for high-risk regulatory audit periods.
 
 ---
 
 ## Repository Structure
-
-```text
-.
-├── 01_General_Ledger_Audit/        # Core Accounting & Schema Auditing Files
-├── 02_Forensic_Whitepapers/        # Benford's Law & Internal Control Frameworks
-├── 03_SQL_Engine/                  # Advanced Window Functions & Analytical Queries
-├── 04_Python_Automation/           # Interactive Streamlit App & Data Pipeline
-│   ├── elliptic_bitcoin_dataset/   # Real-World Elliptic CSV Files
-│   └── app_risk_dashboard.py       # Streamlit Executive Forensic Dashboard
-└── README.md                       # Project Documentation
