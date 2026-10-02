@@ -18,20 +18,21 @@ st.caption("Domain: On-Chain Financial Crime Analysis | Engine: Batch Transactio
 
 @st.cache_data(ttl=3600, show_spinner=False)
 def load_full_elliptic_dataset():
-    # URL dataset Elliptic chuẩn (203,769 transactions)
-    classes_url = "https://raw.githubusercontent.com/trucvyvo10-design/Bitcoin-AML-OnChain-Forensics-Pipeline/main/04_Python_Automation/elliptic_txs_classes.csv"
-    features_url = "https://raw.githubusercontent.com/trucvyvo10-design/Bitcoin-AML-OnChain-Forensics-Pipeline/main/04_Python_Automation/elliptic_txs_features.csv"
+    # 1. Tìm đường dẫn file đúng trong dự án
+    base_dir = os.path.dirname(os.path.abspath(__file__))
     
-    # 1. Thử nạp từ URL hoặc fallback local nếu chạy ở máy nhà
-    try:
-        classes_df = pd.read_csv(classes_url)
-        features_df = pd.read_csv(features_url, header=None)
-    except Exception:
-        # Đường dẫn dự phòng cho môi trường máy cá nhân
-        classes_df = pd.read_csv('elliptic_txs_classes.csv')
-        features_df = pd.read_csv('elliptic_txs_features.csv', header=None)
+    classes_path = os.path.join(base_dir, 'elliptic_txs_classes.csv')
+    features_path = os.path.join(base_dir, 'elliptic_txs_features.csv')
+    
+    if not os.path.exists(classes_path):
+        # Fallback nếu đường dẫn gọi từ thư mục gốc repo
+        classes_path = '04_Python_Automation/elliptic_txs_classes.csv'
+        features_path = '04_Python_Automation/elliptic_txs_features.csv'
 
-    # 2. Ghép dữ liệu chuẩn 203,769 Transaction Nodes
+    classes_df = pd.read_csv(classes_path)
+    features_df = pd.read_csv(features_path, header=None)
+
+    # 2. Ghép toàn bộ 203,769 Transaction Nodes
     feature_cols = list(range(2, 167))
     features_sub = features_df[[0, 1] + feature_cols]
     col_names = ['txId', 'time_step'] + [f'feature_{i}' for i in feature_cols]
@@ -39,7 +40,7 @@ def load_full_elliptic_dataset():
     
     df = pd.merge(classes_df, features_sub, on='txId')
     
-    # 3. Temporal Split (Steps 1-34 Train | Steps 35-49 Test)
+    # 3. Temporal Train/Test Split (Steps 1-34 Train | Steps 35-49 Test)
     labeled_df = df[df['class'].isin(['1', '2'])].copy()
     labeled_df['target'] = labeled_df['class'].apply(lambda x: 1 if str(x) == '1' else 0)
     
@@ -53,7 +54,7 @@ def load_full_elliptic_dataset():
     rf = RandomForestClassifier(n_estimators=50, max_depth=12, random_state=42, class_weight='balanced', n_jobs=-1)
     rf.fit(X_train, y_train)
     
-    # Tính điểm Risk Score cho TOÀN BỘ 203,769 nodes
+    # Risk score cho toàn bộ 203,769 transaction nodes
     df['predicted_risk_score'] = rf.predict_proba(df[feat_list])[:, 1]
     return df
 
