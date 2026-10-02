@@ -8,7 +8,7 @@
 
 This repository implements an end-to-end **Batch On-Chain Anti-Money Laundering (AML) Transaction Monitoring Engine** using the public Elliptic Bitcoin Dataset (203,769 transactions). 
 
-Designed for Financial Crime Investigation (FCC) teams, the engine extracts degree features, evaluates transaction risk via Machine Learning, and provides compliance officers with operational threshold tuning metrics to optimize daily alert triage.
+The engine extracts degree features, evaluates transaction risk via Machine Learning, and provides compliance officers with operational threshold tuning metrics to optimize daily alert triage.
 
 * **Live Demo:** [Bitcoin AML Forensics Interactive Dashboard](https://bitcoin-aml-onchain-forensics-pipeline-jbqosbmbdmv2xwahngbpct.streamlit.app/)
 
