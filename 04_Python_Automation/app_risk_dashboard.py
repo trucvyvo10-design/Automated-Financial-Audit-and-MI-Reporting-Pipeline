@@ -4,7 +4,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import streamlit as st
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import classification_report
 
 st.set_page_config(
     page_title="Elliptic Bitcoin Forensic AML Dashboard",
@@ -17,21 +16,22 @@ os.makedirs('docs', exist_ok=True)
 st.title("Elliptic Bitcoin Forensic AML & Financial Crime Dashboard")
 st.caption("Domain: On-Chain Financial Crime Analysis | Engine: Batch Transaction Monitoring & Forensic Analytics")
 
-@st.cache_data
+@st.cache_data(ttl=3600, show_spinner=False)
 def load_full_elliptic_dataset():
-    # Tải dữ liệu thật từ repository
+    # URL dataset Elliptic chuẩn (203,769 transactions)
     classes_url = "https://raw.githubusercontent.com/trucvyvo10-design/Bitcoin-AML-OnChain-Forensics-Pipeline/main/04_Python_Automation/elliptic_txs_classes.csv"
     features_url = "https://raw.githubusercontent.com/trucvyvo10-design/Bitcoin-AML-OnChain-Forensics-Pipeline/main/04_Python_Automation/elliptic_txs_features.csv"
     
+    # 1. Thử nạp từ URL hoặc fallback local nếu chạy ở máy nhà
     try:
         classes_df = pd.read_csv(classes_url)
         features_df = pd.read_csv(features_url, header=None)
     except Exception:
-        # Nếu đường dẫn local có sẵn
-        classes_df = pd.read_csv('04_Python_Automation/elliptic_txs_classes.csv')
-        features_df = pd.read_csv('04_Python_Automation/elliptic_txs_features.csv', header=None)
+        # Đường dẫn dự phòng cho môi trường máy cá nhân
+        classes_df = pd.read_csv('elliptic_txs_classes.csv')
+        features_df = pd.read_csv('elliptic_txs_features.csv', header=None)
 
-    # Ghép feature và class cho đúng 203,769 giao dịch
+    # 2. Ghép dữ liệu chuẩn 203,769 Transaction Nodes
     feature_cols = list(range(2, 167))
     features_sub = features_df[[0, 1] + feature_cols]
     col_names = ['txId', 'time_step'] + [f'feature_{i}' for i in feature_cols]
@@ -39,25 +39,30 @@ def load_full_elliptic_dataset():
     
     df = pd.merge(classes_df, features_sub, on='txId')
     
-    # Temporal Train/Test Split (Steps 1-34 vs 35-49)
+    # 3. Temporal Split (Steps 1-34 Train | Steps 35-49 Test)
     labeled_df = df[df['class'].isin(['1', '2'])].copy()
     labeled_df['target'] = labeled_df['class'].apply(lambda x: 1 if str(x) == '1' else 0)
     
     train_mask = labeled_df['time_step'] <= 34
-    test_mask = labeled_df['time_step'] > 34
-    
     feat_list = [c for c in labeled_df.columns if c not in ['txId', 'time_step', 'class', 'target']]
-    X_train, y_train = labeled_df.loc[train_mask, feat_list], labeled_df.loc[train_mask, 'target']
     
+    X_train = labeled_df.loc[train_mask, feat_list]
+    y_train = labeled_df.loc[train_mask, 'target']
+    
+    # 4. Huấn luyện Random Forest
     rf = RandomForestClassifier(n_estimators=50, max_depth=12, random_state=42, class_weight='balanced', n_jobs=-1)
     rf.fit(X_train, y_train)
     
-    # Tính điểm rủi ro cho TOÀN BỘ 203,769 transaction nodes
+    # Tính điểm Risk Score cho TOÀN BỘ 203,769 nodes
     df['predicted_risk_score'] = rf.predict_proba(df[feat_list])[:, 1]
     return df
 
-with st.spinner("Loading full Elliptic Bitcoin dataset (203,769 transaction nodes)..."):
-    df = load_full_elliptic_dataset()
+with st.spinner("Processing Full Elliptic Bitcoin Dataset (203,769 Transaction Nodes)..."):
+    try:
+        df = load_full_elliptic_dataset()
+    except Exception as e:
+        st.error(f"Error loading full dataset: {e}")
+        st.stop()
 
 # COMPLIANCE CONTROLS
 st.sidebar.header("Compliance Operations Control")
