@@ -74,7 +74,7 @@ Bitcoin-AML-OnChain-Forensics-Pipeline/
 ## Live Dashboard & Deployment
 
 The interactive dashboard is deployed via Streamlit Community Cloud:
-* **Interactive SAR Queue:** Filtered by customizable Risk Score cutoffs.
+* **Alert Investigation Queue:** Filtered by customizable Risk Score cutoffs.
 * **Graph Topology Metrics:** Inbound/Outbound degree attributes per transaction node.
 * **Operational Capacity Slider:** Adjust alert thresholds dynamically to match daily compliance audit limits.
 
