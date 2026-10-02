@@ -2,6 +2,7 @@
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://bitcoin-aml-onchain-forensics-pipeline-jbqosbmbdmv2xwahngbpct.streamlit.app/)
 
 ## Executive Overview
 
@@ -9,7 +10,7 @@ This repository implements an end-to-end **Batch On-Chain Anti-Money Laundering 
 
 Designed for Financial Crime Investigation (FCC) teams, the engine extracts degree features, evaluates transaction risk via Machine Learning, and provides compliance officers with operational threshold tuning metrics to optimize daily alert triage.
 
----
+* **Live Demo:** [Bitcoin AML Forensics Interactive Dashboard](https://bitcoin-aml-onchain-forensics-pipeline-jbqosbmbdmv2xwahngbpct.streamlit.app/)
 
 ## Key Corrective Methodologies & Data Integrity
 
